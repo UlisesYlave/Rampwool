@@ -1,5 +1,8 @@
+"use client"
+
 import { Shield } from "lucide-react"
 import Link from "next/link"
+import { useLanguage } from "@/lib/context/LanguageContext"
 
 interface NFTCardProps {
     name: string
@@ -12,6 +15,8 @@ interface NFTCardProps {
 }
 
 export function NFTCard({ name, collection, price, image, owner, isVerified, href }: NFTCardProps) {
+    const { t } = useLanguage()
+
     // Definimos el contenido interno de la tarjeta
     const CardContent = (
         <div className="card-nft cursor-pointer group h-full flex flex-col">
@@ -23,7 +28,7 @@ export function NFTCard({ name, collection, price, image, owner, isVerified, hre
                     className="object-cover w-full h-full group-hover:scale-110"
                 />
                 <div className="absolute top-4 left-4 bg-black/90 backdrop-blur-sm px-3 py-1.5 border border-primary/30">
-                    <span className="text-[10px] font-black text-primary tracking-widest uppercase italic">Rollux</span>
+                    <span className="text-[10px] font-black text-primary tracking-widest uppercase italic">{t('rollux')}</span>
                 </div>
             </div>
 
@@ -39,7 +44,7 @@ export function NFTCard({ name, collection, price, image, owner, isVerified, hre
 
                 <div className="flex justify-between items-end pt-4 border-t border-border">
                     <div className="flex flex-col gap-1">
-                        <span className="data-label">Price</span>
+                        <span className="data-label">{t('price')}</span>
                         <div className="flex items-baseline gap-1.5">
                             <span className="text-2xl font-black text-white">{price}</span>
                             <span className="text-primary font-black text-xs italic">SYS</span>
@@ -47,13 +52,13 @@ export function NFTCard({ name, collection, price, image, owner, isVerified, hre
                     </div>
                     {/* Botón visual (div) para que el Link padre maneje el clic sin nesting inválido */}
                     <div className="bg-primary text-black font-black px-5 py-2.5 text-[10px] uppercase tracking-wider hover:bg-white transition-colors border-2 border-primary active:scale-95 text-center">
-                        BUY
+                        {t('buy')}
                     </div>
                 </div>
 
                 <div className="pt-3 border-t border-border flex justify-between items-center">
                     <div className="flex flex-col gap-0.5">
-                        <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Owner</span>
+                        <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">{t('ownerLabel')}</span>
                         <span className="text-[11px] font-mono text-white font-bold">{owner}</span>
                     </div>
                     {/* Removed ExternalLink as requested */}

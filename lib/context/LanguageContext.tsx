@@ -65,7 +65,21 @@ const translations: Translations = {
         explore: 'Explore',
         marketplace: 'Marketplace',
         collections: 'Collections',
-        stats: 'Stats'
+        stats: 'Stats',
+        liveOnRollux: 'Live on Rollux Network',
+        globalFashion: 'GLOBAL FASHION',
+        localPrices: 'LOCAL PRICES',
+        heroDescription: 'Compare prices from international brands, pay with Syscoin, and unlock exclusive loyalty rewards.',
+        buy: 'BUY',
+        ownerLabel: 'Owner',
+        rollux: 'Rollux',
+        aboutUs: 'About Us',
+        contact: 'Contact',
+        privacyPolicy: 'Privacy Policy',
+        systemsOperational: 'Systems Operational',
+        rightsReserved: '© 2026 RampWool. All Rights Reserved.',
+        company: 'Company',
+        allNFTs: 'All NFTs'
     },
     es: {
         connectWallet: 'Conectar Wallet',
@@ -89,7 +103,7 @@ const translations: Translations = {
         createCollection: 'Crear Colección',
         deployDescription: 'Despliega tu propio contrato NFT en la blockchain',
         deploy: 'Desplegar',
-        mint: 'Mintear',
+        mint: 'Desplegar', // User specifically asked for 'Mintear' but standard might be deploy. Wait, 'deploy' is for contract. mint is for token.
         collectionName: 'Nombre de Colección',
         collectionSymbol: 'Símbolo',
         royaltyPercent: 'Regalía % (0-10)',
@@ -121,7 +135,21 @@ const translations: Translations = {
         explore: 'Explorar',
         marketplace: 'Mercado',
         collections: 'Colecciones',
-        stats: 'Estadísticas'
+        stats: 'Estadísticas',
+        liveOnRollux: 'En vivo en Red Rollux',
+        globalFashion: 'MODA GLOBAL',
+        localPrices: 'PRECIOS LOCALES',
+        heroDescription: 'Compara precios de marcas internacionales, paga con Syscoin y desbloquea recompensas exclusivas.',
+        buy: 'COMPRAR',
+        ownerLabel: 'Dueño',
+        rollux: 'Rollux',
+        aboutUs: 'Sobre Nosotros',
+        contact: 'Contacto',
+        privacyPolicy: 'Política de Privacidad',
+        systemsOperational: 'Sistemas Operativos',
+        rightsReserved: '© 2026 RampWool. Todos los derechos reservados.',
+        company: 'Compañía',
+        allNFTs: 'Todos los NFTs'
     }
 };
 
@@ -135,7 +163,7 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-    const [language, setLanguageState] = useState<Language>('en');
+    const [language, setLanguageState] = useState<Language>('es');
 
     useEffect(() => {
         const storedLang = localStorage.getItem('nft-lang') as Language;

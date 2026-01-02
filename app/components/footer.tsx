@@ -1,7 +1,12 @@
+"use client"
+
 import { Globe } from "lucide-react"
 import Link from "next/link"
+import { useLanguage } from "@/lib/context/LanguageContext"
 
 export function Footer() {
+    const { t } = useLanguage()
+
     return (
         <footer className="bg-black border-t border-white/5 py-20 mt-20">
             <div className="container mx-auto px-4">
@@ -24,42 +29,42 @@ export function Footer() {
                     </div>
 
                     <div>
-                        <h5 className="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-6">Marketplace</h5>
+                        <h5 className="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-6">{t('marketplace')}</h5>
                         <ul className="flex flex-col gap-4 text-xs font-bold text-muted-foreground uppercase tracking-widest">
                             <li>
                                 <Link href="/marketplace" className="hover:text-white">
-                                    All NFTs
+                                    {t('allNFTs')}
                                 </Link>
                             </li>
                             <li>
                                 <a href="#" className="hover:text-white">
-                                    Collections
+                                    {t('collections')}
                                 </a>
                             </li>
                             <li>
                                 <a href="#" className="hover:text-white">
-                                    Stats
+                                    {t('stats')}
                                 </a>
                             </li>
                         </ul>
                     </div>
 
                     <div>
-                        <h5 className="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-6">Company</h5>
+                        <h5 className="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-6">{t('company')}</h5>
                         <ul className="flex flex-col gap-4 text-xs font-bold text-muted-foreground uppercase tracking-widest">
                             <li>
                                 <a href="#" className="hover:text-white">
-                                    About Us
+                                    {t('aboutUs')}
                                 </a>
                             </li>
                             <li>
                                 <a href="#" className="hover:text-white">
-                                    Contact
+                                    {t('contact')}
                                 </a>
                             </li>
                             <li>
                                 <a href="#" className="hover:text-white">
-                                    Privacy Policy
+                                    {t('privacyPolicy')}
                                 </a>
                             </li>
                         </ul>
@@ -68,12 +73,12 @@ export function Footer() {
 
                 <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
                     <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">
-                        © 2026 RampWool. All Rights Reserved.
+                        {t('rightsReserved')}
                     </span>
                     <div className="flex items-center gap-2">
                         <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                         <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
-                            Systems Operational
+                            {t('systemsOperational')}
                         </span>
                     </div>
                 </div>

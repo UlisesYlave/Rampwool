@@ -43,6 +43,10 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  --transition: all 0.2s ease-in-out;
+  --error: var(--destructive);
+  --success: oklch(0.6 0.18 145);
 }
 
 .dark {
@@ -133,7 +137,7 @@
   }
 
   .card-nft {
-    @apply bg-card border-2 border-border overflow-hidden transition-all duration-300 hover:border-primary hover:shadow-[0_0_20px_rgba(250, 204, 21, 0.3)] group;
+    @apply bg-card border-2 border-border overflow-hidden transition-all duration-300 hover:border-primary;
   }
 
   .input-cyber {

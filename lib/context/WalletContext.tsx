@@ -1,8 +1,22 @@
 "use client"
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { ethers, BrowserProvider, JsonRpcSigner } from 'ethers';
-import { getSyscoinProvider } from '@/lib/web3Config';
+import { SYSCOIN_NETWORKS } from '@/lib/web3Config';
+import { useLanguage } from './LanguageContext';
+
+interface NetworkConfig {
+    chainId: number;
+    name: string;
+    icon?: string;
+    rpcUrl: string;
+    blockExplorer: string;
+    nativeCurrency: {
+        name: string;
+        symbol: string;
+        decimals: number;
+    };
+}
 
 interface WalletContextType {
     address: string | null;
@@ -10,12 +24,22 @@ interface WalletContextType {
     provider: BrowserProvider | null;
     isConnected: boolean;
     chainId: number | null;
-    connectWallet: () => Promise<void>;
-    disconnectWallet: () => void;
     currentBalance: string;
+    connectWallet: (type: 'metamask' | '0xaddress') => Promise<void>;
+    disconnectWallet: () => void;
+    switchNetwork: (chainId: number) => Promise<void>;
+    isVerified: boolean;
 }
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
+
+// Extend window interface for ethereum and oxaddress
+declare global {
+    interface Window {
+        ethereum?: any;
+        oxaddress?: any;
+    }
+}
 
 export function WalletProvider({ children }: { children: React.ReactNode }) {
     const [address, setAddress] = useState<string | null>(null);
@@ -23,48 +47,129 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     const [provider, setProvider] = useState<BrowserProvider | null>(null);
     const [chainId, setChainId] = useState<number | null>(null);
     const [currentBalance, setCurrentBalance] = useState<string>('0');
+    const [isVerified, setIsVerified] = useState<boolean>(false);
 
-    // Helper to get MetaMask
+    // We can use the language context to get translations if needed for toasts (though ideally toasts should be handled by a UI component listening to errors)
+    const { t } = useLanguage();
+
+    // Helper: Get MetaMask provider
     const getMetaMask = () => {
-        if (typeof window !== 'undefined' && window.ethereum) {
+        if (typeof window !== 'undefined' && window.ethereum?.isMetaMask && !window.ethereum?.isOxAddress) {
             return window.ethereum;
         }
         return null;
     };
 
-    const updateBalance = async (addr: string, prov: any) => {
+    // Helper: Get 0xAddress provider
+    const get0xAddress = () => {
+        if (typeof window === 'undefined') return null;
+        if (window.oxaddress) return window.oxaddress;
+        if (window.ethereum?.isOxAddress) return window.ethereum;
+        return null;
+    };
+
+    const updateBalance = useCallback(async (addr: string, prov: any) => {
         try {
             const bal = await prov.getBalance(addr);
             setCurrentBalance(parseFloat(ethers.formatEther(bal)).toFixed(4));
         } catch (e) {
             console.error("Error fetching balance:", e);
         }
+    }, []);
+
+    // Verify signature
+    const verifySignature = async (currentSigner: JsonRpcSigner, currentAddress: string) => {
+        try {
+            const message = `Sign to verify ownership of ${currentAddress}\n\nTimestamp: ${Date.now()}`;
+            const signature = await currentSigner.signMessage(message);
+            const recoveredAddress = ethers.verifyMessage(message, signature);
+
+            if (recoveredAddress.toLowerCase() === currentAddress.toLowerCase()) {
+                setIsVerified(true);
+                console.log('[verifySignature] Verified!');
+                return true;
+            }
+        } catch (e: any) {
+            console.log('[verifySignature] User declined:', e.message);
+            setIsVerified(false);
+            return false;
+        }
     };
 
-    const connectWallet = async () => {
-        const ethereum = getMetaMask();
-        if (!ethereum) {
-            alert("MetaMask not installed!");
+    const connectWallet = async (type: 'metamask' | '0xaddress') => {
+        console.log('[connectWallet] Type:', type);
+
+        const wp = type === 'metamask' ? getMetaMask() : get0xAddress();
+        if (!wp) {
+            alert(t('notInstalled')); // Using alert for now, should replace with toast
             return;
         }
 
         try {
-            const browserProvider = new ethers.BrowserProvider(ethereum);
-            const accounts = await browserProvider.send("eth_requestAccounts", []);
+            const accounts = await wp.request({ method: 'eth_requestAccounts' });
+            console.log('[connectWallet] Accounts:', accounts);
 
-            if (accounts.length > 0) {
-                const _signer = await browserProvider.getSigner();
-                const network = await browserProvider.getNetwork();
+            let accountAddress = accounts[0];
 
-                setProvider(browserProvider);
-                setSigner(_signer);
-                setAddress(accounts[0]);
-                setChainId(Number(network.chainId));
-
-                await updateBalance(accounts[0], browserProvider);
+            // Handle array or object returns
+            if (typeof accountAddress !== 'string' && accountAddress?.address) {
+                accountAddress = accountAddress.address;
             }
-        } catch (error) {
-            console.error("Connection failed:", error);
+
+            if (!accountAddress) {
+                throw new Error('No address found');
+            }
+
+            const newProvider = new ethers.BrowserProvider(wp);
+            const newSigner = await newProvider.getSigner();
+
+            setAddress(accountAddress);
+            setProvider(newProvider);
+            setSigner(newSigner);
+
+            const network = await newProvider.getNetwork();
+            const newChainId = Number(network.chainId);
+            setChainId(newChainId);
+
+            await updateBalance(accountAddress, newProvider);
+
+            // Setup listeners
+            if (wp.on) {
+                wp.on('accountsChanged', async (accs: any[]) => {
+                    if (accs.length > 0) {
+                        const newAddr = accs[0]?.address || accs[0];
+                        setAddress(newAddr);
+                        setIsVerified(false);
+                        const p = new ethers.BrowserProvider(wp);
+                        setProvider(p);
+                        const s = await p.getSigner();
+                        setSigner(s);
+                        await updateBalance(newAddr, p);
+                    } else {
+                        disconnectWallet();
+                    }
+                });
+                wp.on('chainChanged', async (newChainIdHex: string) => {
+                    const cid = parseInt(newChainIdHex, 16);
+                    setChainId(cid);
+                    const p = new ethers.BrowserProvider(wp);
+                    setProvider(p);
+                    const s = await p.getSigner();
+                    setSigner(s);
+                    if (address) await updateBalance(address, p);
+                });
+            }
+
+            // Verify signature after connection
+            await verifySignature(newSigner, accountAddress);
+
+        } catch (e: any) {
+            console.error('[connectWallet] Error:', e);
+            if (e.code === 4001) {
+                alert(t('signFailed'));
+            } else {
+                alert(e.message || 'Error connecting wallet');
+            }
         }
     };
 
@@ -74,43 +179,45 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
         setProvider(null);
         setChainId(null);
         setCurrentBalance('0');
+        setIsVerified(false);
     };
 
-    // Listen for account changes
-    useEffect(() => {
-        const ethereum = getMetaMask();
-        if (ethereum) {
-            const handleAccountsChanged = (accounts: string[]) => {
-                if (accounts.length > 0) {
-                    setAddress(accounts[0]);
-                    if (provider) updateBalance(accounts[0], provider);
+    const switchNetwork = async (targetChainId: number) => {
+        if (!provider) return;
+
+        // Find network config
+        const targetNetwork = Object.values(SYSCOIN_NETWORKS).find(n => n.chainId === targetChainId);
+
+        try {
+            const hexChainId = '0x' + targetChainId.toString(16);
+
+            try {
+                // @ts-ignore
+                await provider.provider.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: hexChainId }]
+                });
+            } catch (switchError: any) {
+                if (switchError.code === 4902 && targetNetwork) {
+                    // @ts-ignore
+                    await provider.provider.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [{
+                            chainId: hexChainId,
+                            chainName: targetNetwork.name,
+                            nativeCurrency: targetNetwork.nativeCurrency,
+                            rpcUrls: [targetNetwork.rpcUrl],
+                            blockExplorerUrls: targetNetwork.blockExplorer ? [targetNetwork.blockExplorer] : []
+                        }]
+                    });
                 } else {
-                    disconnectWallet();
+                    throw switchError;
                 }
-            };
-
-            const handleChainChanged = (chainIdHex: string) => {
-                const newChainId = parseInt(chainIdHex, 16);
-                setChainId(newChainId);
-                // Reloading page is recommended by MetaMask on chain change, 
-                // but we can just re-instantiate provider if we want SPA feel
-                window.location.reload();
-            };
-
-            // Modern providers support .on
-            if (ethereum.on) {
-                ethereum.on('accountsChanged', handleAccountsChanged);
-                ethereum.on('chainChanged', handleChainChanged);
             }
-
-            return () => {
-                if (ethereum.removeListener) {
-                    ethereum.removeListener('accountsChanged', handleAccountsChanged);
-                    ethereum.removeListener('chainChanged', handleChainChanged);
-                }
-            };
+        } catch (e) {
+            console.error("Failed to switch network", e);
         }
-    }, [provider]);
+    };
 
     return (
         <WalletContext.Provider value={{
@@ -119,9 +226,11 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
             provider,
             isConnected: !!address,
             chainId,
+            currentBalance,
             connectWallet,
             disconnectWallet,
-            currentBalance
+            switchNetwork,
+            isVerified
         }}>
             {children}
         </WalletContext.Provider>
