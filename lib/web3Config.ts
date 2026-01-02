@@ -1,23 +1,23 @@
 import { ethers } from 'ethers';
 
-// Configuración de redes Syscoin
+// Configuración de redes Rollux (Syscoin L2)
 export const SYSCOIN_NETWORKS = {
   mainnet: {
-    chainId: 57,
-    name: 'Syscoin Mainnet',
-    rpcUrl: 'https://rpc.syscoin.org',
-    blockExplorer: 'https://explorer.syscoin.org',
+    chainId: 570,
+    name: 'Rollux',
+    rpcUrl: 'https://rpc.rollux.com',
+    blockExplorer: 'https://explorer.rollux.com',
     nativeCurrency: {
       name: 'Syscoin',
       symbol: 'SYS',
       decimals: 18,
     },
   },
-  tanenbaum: {
-    chainId: 5700,
-    name: 'Syscoin Tanenbaum Testnet',
-    rpcUrl: 'https://rpc.tanenbaum.io',
-    blockExplorer: 'https://tanenbaum.io',
+  testnet: {
+    chainId: 57000,
+    name: 'Rollux Testnet',
+    rpcUrl: 'https://rpc-tanenbaum.rollux.com',
+    blockExplorer: 'https://rollux.tanenbaum.io',
     nativeCurrency: {
       name: 'Syscoin',
       symbol: 'tSYS',
@@ -34,7 +34,7 @@ export const CONTRACT_ADDRESSES = {
 };
 
 // Obtener provider de Syscoin
-export const getSyscoinProvider = (network: 'mainnet' | 'tanenbaum' = 'tanenbaum') => {
+export const getSyscoinProvider = (network: 'mainnet' | 'testnet' = 'testnet') => {
   return new ethers.JsonRpcProvider(SYSCOIN_NETWORKS[network].rpcUrl);
 };
 
@@ -56,7 +56,7 @@ export const connectWallet = async () => {
       const signer = await provider.getSigner();
       const address = await signer.getAddress();
       const network = await provider.getNetwork();
-      
+
       return {
         address,
         chainId: Number(network.chainId),
@@ -73,10 +73,10 @@ export const connectWallet = async () => {
 };
 
 // Cambiar a red Syscoin
-export const switchToSyscoin = async (network: 'mainnet' | 'tanenbaum' = 'tanenbaum') => {
+export const switchToSyscoin = async (network: 'mainnet' | 'testnet' = 'testnet') => {
   if (typeof window !== 'undefined' && window.ethereum) {
     const networkConfig = SYSCOIN_NETWORKS[network];
-    
+
     try {
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
