@@ -1,7 +1,10 @@
+"use client"
+
 import { Search, LayoutGrid } from "lucide-react"
 import { NFTCard } from "@/app/components/nft-card"
 import { Header } from "@/app/components/header"
 import { Footer } from "@/app/components/footer"
+import { useLanguage } from "@/lib/context/LanguageContext";
 
 // Mock NFT data for demo (will be replaced with contract data when deployed)
 const DEMO_CONTRACT = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
@@ -70,6 +73,9 @@ const mockNFTs = [
 ]
 
 export default function MarketplacePage() {
+
+  const { t } = useLanguage()
+
   return (
     <div className="min-h-screen flex flex-col bg-black">
       <Header />
@@ -78,7 +84,7 @@ export default function MarketplacePage() {
         {/* Page Title */}
         <section className="container mx-auto px-5 py-4 border-b border-white/5">
           <h1 className="text-5xl md:text-5xl font-black italic tracking-tighter mb-4">
-            EXPLORE <span className="text-primary">MARKETPLACE</span>
+            {t('explore').toUpperCase()} <span className="text-primary">{t('marketplace').toUpperCase()}</span>
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl">
             Browse all NFTs available on the RampWool marketplace. Buy, sell, and trade digital assets on Syscoin network.
@@ -89,7 +95,7 @@ export default function MarketplacePage() {
         <section className="bg-zinc-950 border-b border-white/5 py-8 sticky top-20 z-40 backdrop-blur-md">
           <div className="container mx-auto px-4 flex flex-col md:flex-row gap-6">
             <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Search className="absolute left-4 top-1/3 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
                 placeholder="SEARCH NFTS, COLLECTIONS, CREATORS..."

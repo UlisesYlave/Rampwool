@@ -21,11 +21,6 @@ export function Footer() {
                         <p className="text-muted-foreground text-sm max-w-sm leading-relaxed mb-8">
                             Building the infrastructure for the next generation of digital commerce on Syscoin and Rollux networks.
                         </p>
-                        <div className="flex gap-4">
-                            <button className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-primary hover:text-black transition-colors">
-                                <Globe className="w-4 h-4" />
-                            </button>
-                        </div>
                     </div>
 
                     <div>
@@ -37,14 +32,9 @@ export function Footer() {
                                 </Link>
                             </li>
                             <li>
-                                <a href="#" className="hover:text-white">
-                                    {t('collections')}
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" className="hover:text-white">
-                                    {t('stats')}
-                                </a>
+                                <Link href="/plans" className="hover:text-white">
+                                    {t('plans')}
+                                </Link>
                             </li>
                         </ul>
                     </div>
