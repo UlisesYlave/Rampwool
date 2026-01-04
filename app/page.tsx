@@ -18,7 +18,7 @@ export default function Marketplace() {
       <Header />
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-15 border-b border-white/5 relative overflow-hidden">
+      <section className="container mx-auto px-4 py-10 border-b border-white/5 relative overflow-hidden">
         {/* Background Band with Lana Artesanal */}
         <div className="absolute top-0 right-0 w-1/3 h-full -skew-x-12 transform translate-x-1/2 overflow-hidden opacity-50">
           <div className="absolute inset-0 bg-primary/20 mix-blend-overlay z-10"></div>
@@ -43,9 +43,6 @@ export default function Marketplace() {
               <button className="btn-cyber px-10 py-5 text-sm">{t('explore')}</button>
             </div>
           </div>
-          <div className="relative">
-            <img src="/alpaca_nft_hero.png" alt="Featured Alpaca" className="w-[500px] h-[500px] object-contain drop-shadow-2xl" />
-          </div>
         </div>
       </section>
 
@@ -53,35 +50,35 @@ export default function Marketplace() {
       <section className="container mx-auto px-4 py-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <NFTCard
-            name="Cyber Ape #01"
-            collection="CYBER NEON"
-            price="420.69"
-            image="/neon-ape-nft.jpg"
+            name="Premium Alpaca Wool"
+            collection="ANDES SERIES"
+            price="45.00"
+            image="/fabric-wool.jpg"
             owner="0x71...f2e"
             isVerified
             href={`/item/57/${DEMO_CONTRACT}/1`}
           />
           <NFTCard
-            name="Abstract Genesis"
-            collection="GENESIS"
-            price="12.5"
-            image="/abstract-art-nft.png"
+            name="Luxury Mulberry Silk"
+            collection="ORIENTAL LUXE"
+            price="120.00"
+            image="/fabric-silk.jpg"
             owner="0xabc...123"
             href={`/item/57/${DEMO_CONTRACT}/2`}
           />
           <NFTCard
-            name="Void Runner"
-            collection="RUNNER"
-            price="50.0"
-            image="/void-walker-nft.jpg"
+            name="Organic Pima Cotton"
+            collection="PERUVIAN ESSENTIALS"
+            price="18.50"
+            image="/fabric-cotton.jpg"
             owner="0x123...456"
             href={`/item/57/${DEMO_CONTRACT}/3`}
           />
           <NFTCard
-            name="Glitch Samurai"
-            collection="WARRIORS"
-            price="15.5"
-            image="/cyberpunk-character-nft.jpg"
+            name="Heavy Duty Canvas"
+            collection="WORKWEAR"
+            price="22.00"
+            image="/fabric-canvas.jpg"
             owner="0x999...888"
             href={`/item/57/${DEMO_CONTRACT}/4`}
           />

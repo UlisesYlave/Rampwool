@@ -25,8 +25,8 @@ export function Web3Provider({ children }: { children: ReactNode }) {
   const [signer, setSigner] = useState<ethers.Signer | null>(null);
 
   const isConnected = !!address;
-  const isCorrectNetwork = chainId === SYSCOIN_NETWORKS.tanenbaum.chainId || 
-                          chainId === SYSCOIN_NETWORKS.mainnet.chainId;
+  const isCorrectNetwork = chainId === SYSCOIN_NETWORKS.testnet.chainId ||
+    chainId === SYSCOIN_NETWORKS.mainnet.chainId;
 
   // Check if wallet is already connected on mount
   useEffect(() => {
@@ -35,12 +35,12 @@ export function Web3Provider({ children }: { children: ReactNode }) {
         try {
           const provider = new ethers.BrowserProvider(window.ethereum);
           const accounts = await provider.listAccounts();
-          
+
           if (accounts.length > 0) {
             const signer = await provider.getSigner();
             const address = await signer.getAddress();
             const network = await provider.getNetwork();
-            
+
             setAddress(address);
             setChainId(Number(network.chainId));
             setProvider(provider);
@@ -92,8 +92,8 @@ export function Web3Provider({ children }: { children: ReactNode }) {
       setSigner(wallet.signer);
 
       // Switch to Syscoin if not already
-      if (wallet.chainId !== SYSCOIN_NETWORKS.tanenbaum.chainId && 
-          wallet.chainId !== SYSCOIN_NETWORKS.mainnet.chainId) {
+      if (wallet.chainId !== SYSCOIN_NETWORKS.testnet.chainId &&
+        wallet.chainId !== SYSCOIN_NETWORKS.mainnet.chainId) {
         await switchNetwork();
       }
     } catch (error) {
@@ -111,7 +111,8 @@ export function Web3Provider({ children }: { children: ReactNode }) {
 
   const switchNetwork = async () => {
     try {
-      await switchToSyscoin('tanenbaum');
+      // Switch to testnet by default
+      await switchToSyscoin('testnet');
       // After switching, update chain ID
       if (provider) {
         const network = await provider.getNetwork();

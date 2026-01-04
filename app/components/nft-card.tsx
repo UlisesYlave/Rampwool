@@ -58,7 +58,7 @@ export function NFTCard({ name, collection, price, image, owner, isVerified, hre
 
                 <div className="pt-3 border-t border-border flex justify-between items-center">
                     <div className="flex flex-col gap-0.5">
-                        <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">{t('ownerLabel')}</span>
+                        <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">{t('seller') || 'SELLER'}</span>
                         <span className="text-[11px] font-mono text-white font-bold">{owner}</span>
                     </div>
                     {/* Removed ExternalLink as requested */}

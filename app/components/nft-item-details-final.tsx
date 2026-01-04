@@ -7,7 +7,7 @@ export function AttributesGrid({ attributes }: { attributes: any[] }) {
         <div className="border-2 border-white/10 bg-zinc-900/50 overflow-hidden">
             <div className="px-6 py-5 flex items-center gap-3 border-b-2 border-primary/20 bg-black">
                 <Tag className="w-5 h-5 text-primary" />
-                <h3 className="font-black italic uppercase text-sm tracking-widest text-white">Attributes</h3>
+                <h3 className="font-black italic uppercase text-sm tracking-widest text-white">Product Specifications</h3>
             </div>
             <div className="p-6 grid grid-cols-2 gap-4">
                 {attributes.map((attr, i) => (
@@ -38,18 +38,18 @@ export function BlockchainDetails({
     network?: string
 }) {
     const details = [
-        { label: "Contract Address", value: contractAddress || "Unknown", isLink: true },
-        { label: "Token ID", value: tokenId || "Unknown", isLink: false },
-        { label: "Token Standard", value: standard, isLink: false },
-        { label: "Network", value: network, isLink: false },
-        { label: "Metadata Storage", value: "IPFS", isLink: true },
+        { label: "SKU", value: contractAddress ? contractAddress.substring(0, 8).toUpperCase() : "UNKNOWN", isLink: false },
+        { label: "Product ID", value: tokenId || "Unknown", isLink: false },
+        { label: "Material Type", value: standard || "Standard Web3", isLink: false },
+        { label: "Origin", value: network || "Global", isLink: false },
+        { label: "Authentication", value: "Verified on Blockchain", isLink: true },
     ]
 
     return (
         <div className="border-2 border-white/10 bg-zinc-900/50 overflow-hidden">
             <div className="px-6 py-5 flex items-center gap-3 border-b-2 border-primary/20 bg-black">
                 <Database className="w-5 h-5 text-primary" />
-                <h3 className="font-black italic uppercase text-sm tracking-widest text-white">Blockchain Info</h3>
+                <h3 className="font-black italic uppercase text-sm tracking-widest text-white">Product Details</h3>
             </div>
             <div className="p-6 space-y-5">
                 {details.map((item, i) => (
@@ -120,9 +120,9 @@ export function HowItWorks() {
             </div>
             <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
                 {[
-                    { title: "Connect Wallet", desc: "Use MetaMask or 0xAddress to log in securely." },
-                    { title: "Make Offers", desc: "Submit your offer in SYS to the owner." },
-                    { title: "Instant Buy", desc: "Purchase listed assets immediately." },
+                    { title: "Connect Wallet", desc: "Login securely to access wholesale prices." },
+                    { title: "Select Fabric", desc: "Browse our verified premium materials." },
+                    { title: "Instant Buy", desc: "Purchase instantly with SYS or Rollux." },
                 ].map((step, i) => (
                     <div
                         key={i}

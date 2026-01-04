@@ -85,8 +85,8 @@ export function Header() {
                     {isConnected ? (
                         <div className="flex items-center gap-3">
                             <div className="hidden md:block text-right">
-                                <div className="text-[10px] font-bold text-primary">{currentBalance} SYS</div>
-                                <div className="text-[9px] font-mono text-zinc-500">{address?.slice(0, 6)}...{address?.slice(-4)}</div>
+                                <div className="text-[12px] font-bold text-primary">{currentBalance} SYS</div>
+                                <div className="text-[11px] font-mono text-zinc-500">{address?.slice(0, 6)}...{address?.slice(-4)}</div>
                             </div>
                             <button
                                 onClick={disconnectWallet}

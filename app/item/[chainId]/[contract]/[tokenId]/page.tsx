@@ -9,7 +9,8 @@ import { useMarketplace } from '@/lib/hooks/useMarketplace';
 import { getSyscoinProvider, SYSCOIN_NETWORKS, formatAddress } from '@/lib/web3Config';
 import { Header } from '@/app/components/header';
 import { Footer } from '@/app/components/footer';
-import { AttributesGrid, BlockchainDetails, ActivityLog, HowItWorks } from '@/app/components/nft-item-details-final';
+import { AttributesGrid, BlockchainDetails, HowItWorks } from '@/app/components/nft-item-details-final';
+import { PriceComparison } from '@/app/components/price-comparison';
 
 // Minimal ABI for reading NFT data
 const NFT_ABI = [
@@ -65,20 +66,22 @@ export default function ItemPage({ params }: { params: Promise<{ chainId: string
 
         // Generate synthetic data based on ID to make it look dynamic
         const id = parseInt(tokenId) || 0;
-        const mockCollections = ["CYBER NEON", "GENESIS", "RUNNER", "WARRIORS"];
-        const mockImages = ["/neon-ape-nft.jpg", "/abstract-art-nft.png", "/void-walker-nft.jpg", "/cyberpunk-character-nft.jpg"];
+        const mockCollections = ["NATURAL SILK", "INDUSTRIAL", "SUSTAINABLE", "PREMIUM"];
+        const mockImages = ["/fabric-silk.jpg", "/fabric-canvas.jpg", "/fabric-cotton.jpg", "/fabric-velvet.jpg"];
+        const mockNames = ["Royal Silk Chiffon", "Heavy Duty Canvas", "Organic Cotton Print", "Luxury Velvet Red"];
 
         const mockData = {
-          name: `Asset #${tokenId} - ${mockCollections[id % 4]}`,
+          name: mockNames[id % 4],
           collection: mockCollections[id % 4],
-          description: "A unique digital asset minted on the Rollux Layer 2 Network. Secured by Bitcoin merge-mining.",
+          description: "Premium quality fabric suitable for high-end fashion and industrial applications. Sourced directly from manufacturers.",
           image: mockImages[id % 4],
           attributes: [
-            { trait_type: "Background", value: "Cyber Dark" },
-            { trait_type: "Rarity", value: "Legendary" },
-            { trait_type: "Power", value: (Math.random() * 100).toFixed(0) }
+            { trait_type: "Material", value: "100% Cotton" },
+            { trait_type: "Weight", value: "200 GSM" },
+            { trait_type: "Width", value: "150 cm" },
+            { trait_type: "Origin", value: "Italy" }
           ],
-          owner: "0x1234...5678",
+          owner: "TextileMerchant",
           uri: ""
         };
 
@@ -127,7 +130,7 @@ export default function ItemPage({ params }: { params: Promise<{ chainId: string
                 alt={nft.name}
               />
               <div className="absolute top-4 left-4 bg-black/80 backdrop-blur border border-primary/20 px-3 py-1">
-                <span className="text-[10px] font-black text-primary uppercase tracking-widest">Rollux L2</span>
+                <span className="text-[10px] font-black text-primary uppercase tracking-widest">Premium Fabric</span>
               </div>
             </div>
 
@@ -151,7 +154,7 @@ export default function ItemPage({ params }: { params: Promise<{ chainId: string
                 {nft.name}
               </h1>
               <div className="flex items-center gap-4 text-sm font-bold text-muted-foreground pt-2">
-                <span>Owned by</span>
+                <span>Sold by</span>
                 <span className="text-white font-mono bg-zinc-900 px-2 py-1 border border-white/10 rounded-sm">
                   {formatAddress(nft.owner)}
                 </span>
@@ -180,10 +183,10 @@ export default function ItemPage({ params }: { params: Promise<{ chainId: string
               {txError && <p className="text-red-500 text-xs text-center mt-3 font-bold bg-red-900/10 p-2 border border-red-900/50">{txError}</p>}
             </div>
 
-            {/* Activity */}
+            {/* Price Comparison */}
             <div className="p-1">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.4em] mb-4 text-white opacity-50">Item Activity</h4>
-              <ActivityLog />
+              {/* <h4 className="text-[10px] font-black uppercase tracking-[0.4em] mb-4 text-white opacity-50">Price Comparison</h4> */}
+              <PriceComparison productName={nft.name} />
             </div>
           </div>
         </div>

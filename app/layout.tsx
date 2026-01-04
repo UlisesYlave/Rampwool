@@ -9,11 +9,16 @@ import { ThemeProvider } from "@/lib/context/ThemeContext"
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap", // Añade display swap
+  // Opción: Precargar la fuente localmente si está disponible
+  adjustFontFallback: true,
+  // Opción: No intentar descargar en build si hay problemas
+  preload: false, // Desactiva preload si hay problemas de red
 })
 
 export const metadata: Metadata = {
   title: "RampWool | NFT Marketplace on Syscoin",
-  description: "Marketplace NFT descentralizado con estética cyber en Syscoin y Rollux networks.",
+  description: "Marketplace NFT descentralizado en Syscoin y Rollux networks.",
 }
 
 export default function RootLayout({
@@ -23,7 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${inter.className} ${inter.variable}`}>
         <LanguageProvider>
           <WalletProvider>
             <ThemeProvider>

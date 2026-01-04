@@ -9,64 +9,64 @@ import { useLanguage } from "@/lib/context/LanguageContext";
 // Mock NFT data for demo (will be replaced with contract data when deployed)
 const DEMO_CONTRACT = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
-const mockNFTs = [
+const mockFabrics = [
   {
     id: 1,
-    name: "Abstract Genesis #44",
-    collection: "CYBER ART",
-    price: "12.5",
-    image: "/abstract-art-nft.png",
-    owner: "0x71...f2e",
+    name: "Royal Silk Chiffon",
+    collection: "NATURAL SILK",
+    price: "1250",
+    image: "/fabric-silk.jpg",
+    owner: "SilkRoad Traders",
     isVerified: true,
     href: `/item/57/${DEMO_CONTRACT}/1`
   },
   {
     id: 2,
-    name: "The Void Runner",
-    collection: "RUNNERS",
-    price: "0.85",
-    image: "/cyberpunk-character-nft.jpg",
-    owner: "0x12...a3b",
+    name: "Heavy Duty Canvas",
+    collection: "INDUSTRIAL",
+    price: "85",
+    image: "/fabric-canvas.jpg",
+    owner: "TextilePro",
     isVerified: false,
     href: `/item/57/${DEMO_CONTRACT}/2`
   },
   {
     id: 3,
-    name: "Neon Ape 421",
-    collection: "BEYOND",
-    price: "420",
-    image: "/neon-ape-nft.jpg",
-    owner: "0x99...cc4",
+    name: "Organic Cotton Print",
+    collection: "SUSTAINABLE",
+    price: "42",
+    image: "/fabric-cotton.jpg",
+    owner: "GreenWeave",
     isVerified: true,
     href: `/item/57/${DEMO_CONTRACT}/3`
   },
   {
     id: 4,
-    name: "Spectral Fragment",
-    collection: "SPACE",
-    price: "5.2",
-    image: "/void-walker-nft.jpg",
-    owner: "0x44...e1d",
+    name: "Luxury Velvet Red",
+    collection: "PREMIUM",
+    price: "520",
+    image: "/fabric-velvet.jpg",
+    owner: "RoyalFabrics",
     isVerified: false,
     href: `/item/57/${DEMO_CONTRACT}/4`
   },
   {
     id: 5,
-    name: "Digital Wave",
-    collection: "ABSTRACT",
-    price: "8.75",
-    image: "/abstract-art-nft.png",
-    owner: "0x55...b2c",
+    name: "Technical Nylon",
+    collection: "SPORTSWEAR",
+    price: "87",
+    image: "/fabric-nylon.jpg",
+    owner: "TechTex",
     isVerified: true,
     href: `/item/57/${DEMO_CONTRACT}/5`
   },
   {
     id: 6,
-    name: "Cyber Samurai",
-    collection: "WARRIORS",
-    price: "15.0",
-    image: "/cyberpunk-character-nft.jpg",
-    owner: "0x66...d3e",
+    name: "Wool Blend Tartan",
+    collection: "WINTER",
+    price: "150",
+    image: "/fabric-wool.jpg",
+    owner: "HighlandMills",
     isVerified: true,
     href: `/item/57/${DEMO_CONTRACT}/6`
   },
@@ -84,10 +84,10 @@ export default function MarketplacePage() {
         {/* Page Title */}
         <section className="container mx-auto px-5 py-4 border-b border-white/5">
           <h1 className="text-5xl md:text-5xl font-black italic tracking-tighter mb-4">
-            {t('explore').toUpperCase()} <span className="text-primary">{t('marketplace').toUpperCase()}</span>
+            {t('explore').toUpperCase()} <span className="text-primary">FABRICS</span>
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl">
-            Browse all NFTs available on the RampWool marketplace. Buy, sell, and trade digital assets on Syscoin network.
+            Browse all premium fabrics available on the RampWool marketplace. Buy directly from manufacturers with crypto.
           </p>
         </section>
 
@@ -98,7 +98,7 @@ export default function MarketplacePage() {
               <Search className="absolute left-4 top-1/3 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="SEARCH NFTS, COLLECTIONS, CREATORS..."
+                placeholder="SEARCH FABRICS, MATERIALS, ORIGIN..."
                 className="input-cyber pl-12"
               />
             </div>
@@ -119,7 +119,7 @@ export default function MarketplacePage() {
         {/* NFT Grid */}
         <section className="container mx-auto px-4 py-20">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {mockNFTs.map((nft) => (
+            {mockFabrics.map((nft) => (
               <NFTCard
                 key={nft.id}
                 name={nft.name}
@@ -145,11 +145,11 @@ export default function MarketplacePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
               <div className="text-4xl font-black text-primary mb-2">1,234</div>
-              <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Total NFTs</div>
+              <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Total Fabrics</div>
             </div>
             <div>
               <div className="text-4xl font-black text-white mb-2">567</div>
-              <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Collections</div>
+              <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Suppliers</div>
             </div>
             <div>
               <div className="text-4xl font-black text-primary mb-2">89K</div>
